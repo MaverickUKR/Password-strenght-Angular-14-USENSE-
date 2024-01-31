@@ -1,25 +1,22 @@
-import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { PasswordStrengthService } from './password-strength.service';
 
 @Component({
   selector: 'app-password-strength',
   templateUrl: './password-strength.component.html',
-  styleUrls: ['./password-strength.component.css']
+  styleUrls: ['./password-strength.component.css'],
 })
-export class PasswordStrengthComponent {
-  passwordControl = new FormControl('');
+export class PasswordStrengthComponent implements OnChanges {
+  @Input() password: string = '';
+  strength: string = '';
 
-  getPasswordStrength(): string {
-    const password = this.passwordControl.value;
-    if (!password) {
-      return 'empty';
-    } else if (password.length < 8) {
-      return 'lessEightChars';
-    } else if (/[a-zA-Z]/.test(password) && /[0-9]/.test(password) && /[^a-zA-Z0-9]/.test(password)) {
-      return 'strong';
-    } else if ((/[a-zA-Z]/.test(password) && /[0-9]/.test(password)) || (/[a-zA-Z]/.test(password) && /[^a-zA-Z0-9]/.test(password)) || (/[0-9]/.test(password) && /[^a-zA-Z0-9]/.test(password))) {
-      return 'medium';
+  constructor(private passwordStrengthService: PasswordStrengthService) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['password']) {
+      this.strength = this.passwordStrengthService.getPasswordStrength(
+        this.password
+      );
     }
-    return "easy"
   }
 }

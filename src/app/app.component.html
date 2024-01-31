@@ -1,5 +1,6 @@
-<!-- src/app/app.component.html -->
-<div>
-  <h1>Password Strength Tester</h1>
-  <app-password-strength></app-password-strength>
-</div>
+<h1>Password Strength Tester</h1>
+<app-password-input-component
+  [(ngModel)]="password"
+></app-password-input-component>
+<app-password-strength [password]="password"></app-password-strength>
+<h2>Your password is {{ password }}</h2>
